@@ -16,7 +16,7 @@ def handler(event, context):
         bucket_name = recordBody["Records"][0]["s3"]["bucket"]["name"]
         key=recordBody["Records"][0]["s3"]["object"]["key"]
 
-        logging.info("bucket_name %s", bucket_name)
+        logging.info("bucket_name s %s", bucket_name)
         logging.info("key %s", key)
 
 
