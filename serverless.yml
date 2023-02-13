@@ -1,0 +1,41 @@
+service: sqs-serverless-tutorial
+
+custom:
+  queueName: TutorialSQS
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: eu-west-2
+
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:ReceiveMessage
+        - sqs:GetQueueUrl
+        - sqs:DeleteMessage
+        - sqs:ChangeMessageVisibility
+        - sqs:GetQueueAttributes
+        - sqs:ListQueues
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+        - sqs:PurgeQueue
+        - sqs:SendMessage
+      Resource:
+        - !Sub ${TestEventQueueArn}
+
+
+resources:
+  Parameters:
+    TestEventQueueArn:
+      Type: String
+      Default: arn:aws:sqs:eu-west-2:634182598822:event-test-queue
+
+functions:
+  serverless-sqs-event-test:
+    handler: src/sqs_event.handler
+    events:
+      - sqs: 
+          arn: ${ssm:/tp/core-banking/test-event-sqs-queue/arn}
+          batchSize: 1
